@@ -1,5 +1,8 @@
+import 'package:e_comperce_app/controller/order_controller.dart';
 import 'package:e_comperce_app/controller/product_controller.dart';
 import 'package:e_comperce_app/models/product_list_model.dart';
+import 'package:e_comperce_app/repositary/order_services/order_service.dart';
+import 'package:e_comperce_app/views/product/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -24,7 +27,9 @@ class _CartListScreenState extends ConsumerState<CartListScreen> {
 
 //  final filter =FilterProducts.fiterForAddToCard(ref: ref,);
     return  Scaffold(
-appBar: AppBar(),
+appBar: AppBar(
+  title: Text('CART'),
+),
       body: Column(
         children: [
           Expanded(child: ListView.builder(
@@ -90,7 +95,13 @@ appBar: AppBar(),
              
 
                        CartButton(icon: Icons.add,onpress: (){
+
+                        if(cartProvider[index].productModel!.countInStock! <= cartProvider[index].quantity!.toInt()){
+print('Not in stock');
+                        }else{
                                       ref.watch(cartControllerProvider.notifier).incrementCartQuantity(context: context, index: index, value: 1 ,cartModel: cartProvider[index]);
+                        }
+                          
 
                      setState(() {
                    
@@ -125,7 +136,17 @@ appBar: AppBar(),
                padding: const EdgeInsets.all(8.0),
                width: 1.sw,
                height: 60.h,
-              child: ElevatedButton(onPressed: (){}, child: Text('ORDER')))
+              child: ElevatedButton(onPressed:cartProvider!.length > 0 ? ()async{
+final orderProv =await ref.read(orderControllerProvider);
+// print(cartProvider![0].product);
+// ignore: use_build_context_synchronously
+// await ref.read(orderControllerProvider.notifier).placeYourOrder(context,cartProvider);
+
+Navigator.push(context, MaterialPageRoute(builder: (context){
+  return OrderScreen();
+}));
+
+              }:null, child: Text('ORDER')))
         ],
       )
     );

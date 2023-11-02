@@ -1,5 +1,6 @@
 import 'package:e_comperce_app/repositary/load_data.dart';
 import 'package:e_comperce_app/views/home/home_screen.dart';
+import 'package:e_comperce_app/views/widgets/bottom_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -22,12 +23,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   nextScreen()async{
-    Future.delayed(Duration(seconds: 0),(){
-               LoadData.getProductData(context: context, ref: ref);
-
+   await Future.delayed(Duration(seconds: 0),()async{
+            await   LoadData.getProductData(context: context, ref: ref);
+        await   LoadData.getCategoryData(context: context, ref: ref);
     }).then((value) {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> CustomBottomNavigationBar()));
 
+    }).catchError((err){
+      print(err);
     });
   }
   @override

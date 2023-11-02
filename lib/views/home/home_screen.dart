@@ -6,25 +6,33 @@ import 'package:e_comperce_app/views/home/widgets/category_button.dart';
 import 'package:e_comperce_app/views/product/add_to_card_screen.dart';
 import 'package:e_comperce_app/views/product/widgets/product_detail_card.dart';
 import 'package:e_comperce_app/views/product/widgets/product_widget.dart';
+import 'package:e_comperce_app/views/widgets/bottom_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../controller/order_controller.dart';
+
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+   HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context , WidgetRef ref) {
     final user =ref.watch(userProvider);
     final productProvider =ref.watch(prodcutListProvider);
-
+    final categoryListProv =ref.watch(categoryListProvider);
+    
     final featuredProductList =FilterProducts.filterProductWithIsFeatured(productModel: productProvider!.productModel,ref: ref);
     return  Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        actions: [IconButton(onPressed: ()async{
+        actions: [
+          IconButton(onPressed: (){
+            ref.watch(orderControllerProvider.notifier).getUserOrders(context, user?.sId);
+          }, icon:Icon(Icons.add)),
+          IconButton(onPressed: ()async{
         // await  AuthRepository.products();
        
         Navigator.push(context, MaterialPageRoute(builder: (context)=>CartListScreen()));
@@ -57,21 +65,27 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
      SizedBox(height: 10.h,),
-            Row(
-              children: List.generate(featuredProductList!.length, (index) => CategoryButton(
-
-                featureProduct: featuredProductList[index],
-              )),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(categoryListProv.length, (index) => CategoryButton(
+            onpress: (){
+               ref.watch(categoryValue.notifier).state=categoryListProv[index]!.name!;
+               print(ref.watch(categoryValue));
+            },
+                  category: categoryListProv[index],
+                )),
+              ),
             ),
                  SizedBox(height: 10.h,),
       Expanded(child: GridView.builder(gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 300.h,
+        maxCrossAxisExtent: 0.5.sw,
         mainAxisExtent: 240.h,
                   // childAspectRatio: 2 / 3,
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 20
       ), 
-      itemCount: featuredProductList.length,
+      itemCount: featuredProductList!.length,
       itemBuilder: (context,index){
       return ProductCard(productModel: featuredProductList[index],);
       
@@ -83,7 +97,10 @@ class HomeScreen extends ConsumerWidget {
           ],
         ),
       ) ,
+
+      
     );
   }
+
 }
 

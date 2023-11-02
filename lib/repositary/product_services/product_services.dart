@@ -42,8 +42,12 @@ class ProductRepositaryClass {
     // String url ='http://localhost:8000/api/v1/products/';
 
   Uri uri = Uri.parse(url);
+         LocalStorageRepository localStorageRepository = LocalStorageRepository();
+    var token  =await localStorageRepository.getToken();
  Response response = await _client.get(uri,
-      headers: {'Content-Type': 'application/json'},);
+      headers: {'Content-Type': 'application/json',
+           'Authorization': 'Bearer $token',
+      },);
 
       switch (response.statusCode) {
 
@@ -70,5 +74,61 @@ class ProductRepositaryClass {
 
 
 
+  Future<List<Category?>> fetchCategories({required BuildContext context}) async {
+    try {
+
+     String url = AppConstants.baseUrl + 'api/v1/categories/';
+
+    // String url ='http://localhost:8000/api/v1/products/';
+
+  Uri uri = Uri.parse(url);
+  
+       LocalStorageRepository localStorageRepository = LocalStorageRepository();
+    var token  =await localStorageRepository.getToken();
+ Response response = await _client.get(uri,
+      headers: {'Content-Type': 'application/json',
+       'Authorization': 'Bearer $token',
+      },);
+
+      switch (response.statusCode) {
+
+        
+        case 200:
+        var data =jsonDecode(response.body)['data'];
+        //  print(data);
+          // UserModel? userModel = UserModel();
+      
+List<Category?> categList=[
+  Category(
+  color: '',
+  iV: 00,
+  name: 'All',
+  sId: '000'
+)
+];
+
+
+if(data !=null && data.length >0){
+  data.forEach((v) {
+        categList.add( Category.fromJson(v));
+      });
+}
+
+
+print(categList.length);
+          return categList;
+        default:
+          throw Exception(response.reasonPhrase);
+      }
+    } on SocketException {
+      throw NoInternetException('No Internet');
+    } on HttpException {
+      throw NoServiceFoundException('No Service Found');
+    } on FormatException {
+      throw InvalidFormatException('Invalid Data Format');
+    } catch (e) {
+      throw UnknownException(e.toString());
+    }
+  }
 
 }

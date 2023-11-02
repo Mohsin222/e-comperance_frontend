@@ -17,4 +17,20 @@ class LoadData{
         .fetchListOfProduct(context);
   }
 
+
+
+  //get category data
+     static Future<void> getCategoryData(
+      {required BuildContext context, required ref}) async {
+    LocalStorageRepository localStorage = LocalStorageRepository();
+    // await localStorage.getToken().then((value) => ref
+    //     .read(productControllerProvider.notifier)
+    //     .getAllPatients(context, value));
+
+
+        
+  await ref.read(productControllerProvider.notifier)
+        .listOfCategory(context);
+  }
+
 }

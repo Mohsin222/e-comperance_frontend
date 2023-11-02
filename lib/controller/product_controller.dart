@@ -8,7 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final prodcutListProvider = StateProvider<ProductListModel?>((ref) => null);
+final categoryListProvider = StateProvider<List<Category?>>((ref) => [
 
+]);
+
+final categoryValue = StateProvider<String>((ref) => 'All');
 // final totalPriceProvider = StateProvider<double?>((ref) => 0);
 // final cartListProvider = StateProvider<List<CartModel>?>((ref) => []);
 
@@ -55,6 +59,31 @@ class ProductController extends StateNotifier<bool> {
     _ref.read(prodcutListProvider.notifier).update((state){
 state = productListModel;
       return productListModel;
+
+    });
+
+  
+  }
+
+
+
+
+
+  
+  Future listOfCategory(BuildContext context,) async {
+    state = true;
+
+    
+List<Category?> d=         await _productRepositaryClass.fetchCategories(context:context,);
+
+
+    // print(user);
+        state = false;
+    _ref.read(categoryListProvider.notifier).update((state){
+state = d;
+
+
+      return state;
 
     });
 

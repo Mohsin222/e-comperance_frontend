@@ -1,4 +1,5 @@
 import 'package:e_comperce_app/views/auth/login_screen.dart';
+import 'package:e_comperce_app/views/auth/signup_screen.dart';
 import 'package:e_comperce_app/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

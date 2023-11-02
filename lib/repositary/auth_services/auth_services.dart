@@ -6,6 +6,7 @@ import 'package:e_comperce_app/constants/app_contants.dart';
 import 'package:e_comperce_app/models/user_model.dart';
 import 'package:e_comperce_app/repositary/api_response_helper.dart';
 import 'package:e_comperce_app/repositary/local_storage_services/local_storage_repositary.dart';
+import 'package:e_comperce_app/views/widgets/custom_snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -44,16 +45,18 @@ class AuthRepository {
 
   // SignUp verification
   Future registerUser(
-    BuildContext context,
+{
+      BuildContext? context,
   UserModel? userModel
+}
   ) async {
     try {
-        String url = AppConstants.baseUrl +'api/v1/users/';
+        String url = '${AppConstants.baseUrl}api/v1/users/';
 
   Uri uri = Uri.parse(url);
 
  http.Response response = await http.post(uri,
-      headers: {'Content-Type': 'application/json'}, body: userModel!.toJson());
+      headers: {'Content-Type': 'application/json'}, body: json.encode(userModel!.toJson()));
   
       print(response.statusCode);
       switch (response.statusCode) {
@@ -65,12 +68,18 @@ var data =jsonDecode(response.body);
           throw Exception(response.reasonPhrase);
       }
     } on SocketException {
+            CustomSnackBar.buildErrorSnackbar(context!, 'No Internet');
       throw NoInternetException('No Internet');
     } on HttpException {
+            CustomSnackBar.buildErrorSnackbar(context!, 'No Service Found');
       throw NoServiceFoundException('No Service Found');
     } on FormatException {
+            CustomSnackBar.buildErrorSnackbar(context!, 'Invalid Data Format');
       throw InvalidFormatException('Invalid Data Format');
     } catch (e) {
+
+    
+         CustomSnackBar.buildErrorSnackbar(context!,e.toString());
       throw UnknownException(e.toString());
     }
   }
@@ -83,7 +92,7 @@ var data =jsonDecode(response.body);
 
  
 
-     String url = AppConstants.baseUrl + 'api/v1/users/login';
+     String url = '${AppConstants.baseUrl}api/v1/users/login';
 
   Uri uri = Uri.parse(url);
   print(uri);
@@ -92,26 +101,35 @@ var data =jsonDecode(response.body);
         "email":email,
         "passwordHash":password
       }));
-
+print(response.statusCode);
       switch (response.statusCode) {
         case 200:
+ 
           var data = await jsonDecode(response.body);
 
+       LocalStorageRepository localStorageRepository = LocalStorageRepository();
+        localStorageRepository.setToken(data['token']);
 
+
+        print(localStorageRepository.getToken());
           // storeUserTokenInSharedPref(data['accessToken']);
-          UserModel? rNetUser = await getUserData(email);
-          return rNetUser;
+          // UserModel? rNetUser = await getUserData(email);
+          return await getUserData(context,email);
           // return 200;
         default:
           throw Exception(response.reasonPhrase);
       }
     } on SocketException {
+      CustomSnackBar.buildErrorSnackbar(context, 'No Internet');
       throw NoInternetException('No Internet');
     } on HttpException {
+      CustomSnackBar.buildErrorSnackbar(context, 'No Service Found');
       throw NoServiceFoundException('No Service Found');
     } on FormatException {
+         CustomSnackBar.buildErrorSnackbar(context, 'Invalid Data Format');
       throw InvalidFormatException('Invalid Data Format');
     } catch (e) {
+       CustomSnackBar.buildErrorSnackbar(context, e.toString());
       throw UnknownException(e.toString());
     }
   }
@@ -120,35 +138,45 @@ var data =jsonDecode(response.body);
 
 
   //user Info data
-  Future<UserModel?> getUserData(String email) async {
+  Future<UserModel?> getUserData(BuildContext context,String email) async {
     try {
-print(email);
+
      String url = AppConstants.baseUrl + 'api/v1/users/getUserData';
 
+      //  LocalStorageRepository localStorageRepository = LocalStorageRepository();
+    var token  =await _localStorageRepository.getToken();
   Uri uri = Uri.parse(url);
- http.Response response = await http.post(uri,
-      headers: {'Content-Type': 'application/json'},body: json.encode({"email":email}));
 
-          print(response.statusCode);
+  print(token);
+ http.Response response = await http.post(uri,
+      headers: {'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+      },body: json.encode({"email":email}));
+
+    
       switch (response.statusCode) {
 
         
         case 200:
         var data =jsonDecode(response.body);
-         print(data['data']);
+        //  print(data['data']);
           UserModel? userModel = UserModel.fromJson(data['data']);
- 
+
           return userModel;
         default:
           throw Exception(response.reasonPhrase);
       }
     } on SocketException {
+            CustomSnackBar.buildErrorSnackbar(context, 'No Internet');
       throw NoInternetException('No Internet');
     } on HttpException {
+         CustomSnackBar.buildErrorSnackbar(context, 'No Service Found');
       throw NoServiceFoundException('No Service Found');
     } on FormatException {
+       CustomSnackBar.buildErrorSnackbar(context, 'Invalid Data Format');
       throw InvalidFormatException('Invalid Data Format');
     } catch (e) {
+            CustomSnackBar.buildErrorSnackbar(context, e.toString());
       throw UnknownException(e.toString());
     }
   }

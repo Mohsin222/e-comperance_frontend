@@ -40,7 +40,8 @@ dependencies:
   flutter_riverpod: ^2.3.5
   http: ^0.13.6
   shared_preferences: ^2.0.15
-
+  lottie: ^2.3.2
+  event_bus: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

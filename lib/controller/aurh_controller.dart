@@ -37,7 +37,7 @@ class AuthController extends StateNotifier<bool> {
         super(false);
 
 
-  Future signUp(BuildContext context, String email,String password) async {
+  Future signIn(BuildContext context, String email,String password) async {
     state = true;
 
     
@@ -47,12 +47,22 @@ class AuthController extends StateNotifier<bool> {
     // print(user);
         state = false;
     _ref.read(userProvider.notifier).update((state){
-// state = user;
+state = user;
       return user;
 
     });
 
   
+  }
+
+
+
+
+
+   Future signUp(BuildContext context,UserModel? userModel) async {
+    state = true;
+  await _authRepository.registerUser(context:context, userModel: userModel);
+      state = false;
   }
 
 }

@@ -23,6 +23,7 @@ class ProductCard extends ConsumerWidget {
     final productPriv = ref.watch(prodcutListProvider);
 
     return Container(
+      width: 1.sw,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
       child: Card(
         clipBehavior: Clip.hardEdge,
@@ -40,13 +41,13 @@ class ProductCard extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('diccount'),
+            Text(productModel!.countInStock.toString()),
             IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.heart_fill,color: Colors.red,),)
           ],
         ),
             ),
             Container(
-           padding: EdgeInsets.symmetric(horizontal: 20.h),
+           padding: EdgeInsets.symmetric(horizontal: 5.h),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
 children: [
@@ -93,30 +94,44 @@ children: [
 
     ),
   ), 
-  Row(children: [
-    IconButton(onPressed: (){
 
-   bool ans =   FilterProducts.checkItsAlreadyPresentInCart(ref: ref,productId:productModel!.sId! );
+  Container(
 
-   if(ans ==true){
-    print('already ');
-   }else{
-CartModel? cartModel = CartModel(product: productModel!.sId,quantity: 1.0,productModel: productModel);
+    child: Row(
+      // mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+      InkWell(onTap: (){
+  
+     bool ans =   FilterProducts.checkItsAlreadyPresentInCart(ref: ref,productId:productModel!.sId! );
+  
+     if(ans ==true){
+      print('already ');
+     }
+     else if(productModel!.countInStock! <= 0){
+      print("out of stock");
+     }
+     else{
+  CartModel? cartModel = CartModel(productId: productModel!.sId,quantity: 1.0,productModel: productModel);
+  
+  
+  // print(cartModel.quantity);
+  
+         ref.watch(cartControllerProvider.notifier).addTocart(context: context,cartModel: cartModel);
+  
+         ref.watch(totalPriceProvider.notifier).update((state) {
+     state =state! +      productModel!.price!.toDouble();
+     return state;
+         });
+     }
+  
+      }, child: Icon(Icons.shopping_cart,size: 20.sp,     color: Colors.black38)),
 
-
-// print(cartModel.quantity);
-
-       ref.watch(cartControllerProvider.notifier).addTocart(context: context,cartModel: cartModel);
-
-       ref.watch(totalPriceProvider.notifier).update((state) {
-   state =state! +      productModel!.price!.toDouble();
-   return state;
-       });
-   }
-
-    }, icon: Icon(Icons.shopping_basket,size: 10.sp,     color: Colors.black38)),
-   IconButton(onPressed: (){}, icon: Icon(Icons.heat_pump_rounded,size: 10.sp,     color: Colors.black38))
-  ],)
+     InkWell(
+      onTap: (){},
+      child: Icon(Icons.heat_pump_rounded,size: 20.sp,     color: Colors.black38),
+     )
+    ],),
+  )
       ],
     )
 ],

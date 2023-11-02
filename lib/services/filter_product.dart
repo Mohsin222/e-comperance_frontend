@@ -9,7 +9,24 @@ class FilterProducts{
      required List<ProductModel>? productModel,
     required WidgetRef ref,
   }){
+   final categValue= ref.watch(categoryValue);
+      if(categValue !='All'){
+productModel=showProductWithCategory(productModel: productModel,ref: ref);
+      }
+
 return productModel!.where((element) => element.isFeatured==true).toList();
+  }
+
+    static List<ProductModel>? showProductWithCategory({
+     required List<ProductModel>? productModel,
+    required WidgetRef ref,
+  }){
+   final categValue= ref.watch(categoryValue);
+
+   
+// ignore: unrelated_type_equality_checks
+return productModel!.where((element) => element.category!.name==categValue).toList();
+
   }
 
 
@@ -26,25 +43,10 @@ return productModel!.where((element) => element.isFeatured==true).toList();
 final filterProductTOShowWithCart=ref.watch(filterProductTOShowWithCartProvider);
    final cartProvider =ref.watch(cartListProvider);
  final productProvider =ref.watch(prodcutListProvider);
-  // for (ProductModel objectA in productProvider!.productModel!) {
-  //   for (CartModel objectB in cartProvider!) {
-  //     if (objectA.sId == objectB.product) {
-  //       mdl.add(objectA);
-  //       // ref.read(filterProductTOShowWithCartProvider.notifier).update((state) {
-  //       //   state!.add(objectA);
-
-  //       //   return state;
-  //       // });
-
-  //       // break; // No need to continue checking this element in listB
-  //     }
-  //   }
-  // }
 
 
 
 
-// return filterProductTOShowWithCart;
 return mdl;
   }
 
@@ -58,7 +60,7 @@ return mdl;
 
        for (CartModel obj in cartProvider!) {
 
-    if (obj.product == productId){
+    if (obj.productId == productId){
     response=true;
     break;
       
