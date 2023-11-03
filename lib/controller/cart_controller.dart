@@ -54,7 +54,7 @@ return state;
     });
 
 }
-incrementCartQuantity({required BuildContext context,required int index, required double value,CartModel? cartModel }){
+incrementCartQuantity({required BuildContext context,required int index, required int value,CartModel? cartModel }){
 
 
 //     _ref.watch(cartListProvider.notifier).update((state){
@@ -65,7 +65,7 @@ incrementCartQuantity({required BuildContext context,required int index, require
 //     });
 _ref.read(cartListProvider.notifier).update((state){
 // print(state![index].quantity.toString() +"BEFORE");
-state![index].quantity =state[index].quantity!  + value.toDouble();
+state![index].quantity =state[index].quantity!  + value;
 // print(state[index].quantity.toString() +"AFTER");
 
 
@@ -85,12 +85,12 @@ return state;
 }
 
 
-decrementCartQuantity({required BuildContext context,required int index, required double value,CartModel? cartModel }){
+decrementCartQuantity({required BuildContext context,required int index, required int value,CartModel? cartModel }){
 
 
 _ref.read(cartListProvider.notifier).update((state){
 
-state![index].quantity =state[index].quantity!  - value.toDouble();
+state![index].quantity =state[index].quantity!  - value;
 
 
 // var minus =cartModel.productModel.price 

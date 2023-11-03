@@ -1,6 +1,9 @@
+import 'package:e_comperce_app/controller/aurh_controller.dart';
 import 'package:e_comperce_app/controller/cart_controller.dart';
 import 'package:e_comperce_app/controller/order_controller.dart';
+import 'package:e_comperce_app/controller/product_controller.dart';
 import 'package:e_comperce_app/models/order_model.dart';
+import 'package:e_comperce_app/services/filter_product.dart';
 import 'package:e_comperce_app/utils/text_field_decoration.dart';
 import 'package:e_comperce_app/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -159,8 +162,10 @@ spaceBtn,
               phone: phoneController.text.trim(),
               shippingAddress1: shippingAddress1Controller.text.trim(),
               shippingAddress2: shippingAddress2Controller.text.trim(),
-              zip:0000.toString(),
-              user: "6531151c4aa5fd1e33276f3f",
+              zip:zipCodeController.text.trim(),
+              user: ref.watch(userProvider)!.sId,
+              status: 'panding'
+              
             );
             //      OrderModel orderModel =OrderModel(
             //   // city: cityController.text.trim(),
@@ -172,14 +177,24 @@ spaceBtn,
             //   // zip:0000,
             //   user: "6531151c4aa5fd1e33276f3f",
             // );
-ref.watch(orderControllerProvider.notifier).placeYourOrder(context, orderModel);
+
+            // print(ref.watch(cartListProvider));
+await ref.watch(orderControllerProvider.notifier).placeYourOrder(context, orderModel);
+
+FilterProducts.removeItemCountWhenOrderPlace(ref: ref,
+cartitems: orderModel.orderItems!,
+productId: orderModel.orderItems![0].productId);
+
+
 // var d=ref.watch(cartListProvider);
 // print(d![0].productModel!.sId);
 
-ref.watch(cartListProvider.notifier).state=[];
-ref.watch(totalPriceProvider.notifier).state=0;
-Navigator.popUntil(context, (route) => false);
-Navigator.push(context, MaterialPageRoute(builder: (context)=> const SplashScreen()));
+
+
+
+
+// Navigator.popUntil(context, (route) => false);
+// Navigator.push(context, MaterialPageRoute(builder: (context)=> const SplashScreen()));
           }
               }:null, child:ref.watch(orderControllerProvider.notifier).state==false ? const Text('ORDER'):CircularProgressIndicator())),
 

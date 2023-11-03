@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:e_comperce_app/constants/app_contants.dart';
+import 'package:e_comperce_app/controller/order_controller.dart';
 import 'package:e_comperce_app/models/cart_model.dart';
 import 'package:e_comperce_app/models/dum.dart';
 import 'package:e_comperce_app/models/order_model.dart';
@@ -66,7 +67,7 @@ class OrderRepositaryClass {
     //   })
     body: jsonEncode(orderModel!.toJson())
       );
-
+print(response.statusCode);
       switch (response.statusCode) {
 
         
@@ -78,9 +79,12 @@ class OrderRepositaryClass {
 //           return productListModel;
 return 200;
         default:
+       
           throw Exception(response.reasonPhrase);
       }
     } on SocketException {
+
+      
       throw NoInternetException('No Internet');
     } on HttpException {
       throw NoServiceFoundException('No Service Found');
@@ -99,7 +103,7 @@ return 200;
 Future userOrders({required BuildContext context,String? userId}) async {
     try {
 
-     String url = AppConstants.baseUrl + 'api/v1/orders/get/userorders/6531151c4aa5fd1e33276f3f';
+     String url = AppConstants.baseUrl + 'api/v1/orders/get/userorders/$userId';
 
     // String url ='http://localhost:8000/api/v1/products/';
        
@@ -120,7 +124,7 @@ Future userOrders({required BuildContext context,String? userId}) async {
         var data =jsonDecode(response.body) ;
         // print(data['data'][0]!.orderItems);
         //  print(data.runtimeType);
-        // print(data);
+        print(data);
 List<OrderModel?> orderlist=[];
         //  OrderModel orderModel =OrderModel.fromJson(data);
 // for(int i=0; i<=5;i++){
@@ -132,14 +136,14 @@ List<OrderModel?> orderlist=[];
     //     orderlist.add(OrderModel.fromJson(v));
     //   }
 
-    //   if (data['data'] != null) {
+      if (data['data'] != null) {
 
       data['data'].forEach((v) {
         orderlist.add( OrderModel.fromJson(v));
       });
-    
+      }
 // UserOrderListModel? orderListModel= UserOrderListModel.fromJson(data);
-print( orderlist[0]!.orderItems![0].quantity);
+// print( orderlist[0]!.orderItems![0].quantity);
 // print(orderlist[0]!.orderItems);
 return orderlist;
         default:

@@ -6,15 +6,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FilterProducts{
   static List<ProductModel>? filterProductWithIsFeatured({
-     required List<ProductModel>? productModel,
+    //  required List<ProductModel>? productModel,
     required WidgetRef ref,
   }){
    final categValue= ref.watch(categoryValue);
+         var productProvider =ref.watch(prodcutListProvider)!.productModel;
       if(categValue !='All'){
-productModel=showProductWithCategory(productModel: productModel,ref: ref);
+
+productProvider=showProductWithCategory(productModel: productProvider,ref: ref);
       }
 
-return productModel!.where((element) => element.isFeatured==true).toList();
+return productProvider!.where((element) => element.isFeatured==true).toList();
   }
 
     static List<ProductModel>? showProductWithCategory({
@@ -71,5 +73,38 @@ return mdl;
   }
    return  response;
   }
+
+
+  //remove item count when order place
+    static  removeItemCountWhenOrderPlace({
+     required String? productId,
+     required List<CartModel?> cartitems,
+    required WidgetRef ref,
+    // required List<CartModel>? cart_model,
+  }){
+final proDlist=ref.watch(prodcutListProvider);
+    // var d =ref.watch(prodcutListProvider)!.productModel!.where((element) => element.sId==productId).toList(); 
+    // print(d);
+
+    for(int i=0;i<proDlist!.productModel!.length; i++){
+   for(int j=0;j<cartitems.length;j++){
+    // print(j);
+       if(proDlist.productModel![i].sId == cartitems[j]!.productId){
+
+  
+        ref.watch(prodcutListProvider.notifier).update((state) {
+
+
+        
+ state!.productModel![i].countInStock=proDlist.productModel![i].countInStock!.toInt() - cartitems[j]!.quantity!.toInt();
+
+
+             print(state.productModel![i].countInStock.toString()   + 'index');
+       return state;
+        });
+       }
+   }
+    }
+     }
 
 }

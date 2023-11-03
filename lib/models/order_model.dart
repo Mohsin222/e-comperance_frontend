@@ -11,6 +11,8 @@ class OrderModel {
   String? user;
   int? totalPrice;
 String? sId;
+String? status;
+String? dateordered;
   OrderModel(
       {this.orderItems,
       this.shippingAddress1,
@@ -20,7 +22,10 @@ String? sId;
       this.country,
       this.phone,
       this.user,
-      this.sId});
+      this.sId,
+      this.status,
+      this.dateordered
+      });
 
   OrderModel.fromJson(Map<String, dynamic> json) {
     if (json['orderItems'] != null) {
@@ -38,6 +43,8 @@ String? sId;
     user = json['user'];
     totalPrice=json['totalPrice'];
     sId = json['_id'];
+        status = json['status'];
+        dateordered=json['dateordered'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,7 +59,8 @@ String? sId;
     data['country'] = this.country;
     data['phone'] = this.phone;
     data['user'] = this.user;
-     data['_id'] = this.sId;
+    //  data['_id'] = this.sId;
+     data['status']=this.status;
     return data;
   }
 }

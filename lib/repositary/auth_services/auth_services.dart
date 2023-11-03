@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:e_comperce_app/constants/app_contants.dart';
+import 'package:e_comperce_app/controller/aurh_controller.dart';
 import 'package:e_comperce_app/models/user_model.dart';
 import 'package:e_comperce_app/repositary/api_response_helper.dart';
 import 'package:e_comperce_app/repositary/local_storage_services/local_storage_repositary.dart';
@@ -69,17 +70,22 @@ var data =jsonDecode(response.body);
       }
     } on SocketException {
             CustomSnackBar.buildErrorSnackbar(context!, 'No Internet');
+               _ref.watch(authControllerProvider.notifier).state=false;
       throw NoInternetException('No Internet');
     } on HttpException {
             CustomSnackBar.buildErrorSnackbar(context!, 'No Service Found');
+               _ref.watch(authControllerProvider.notifier).state=false;
       throw NoServiceFoundException('No Service Found');
     } on FormatException {
             CustomSnackBar.buildErrorSnackbar(context!, 'Invalid Data Format');
+               _ref.watch(authControllerProvider.notifier).state=false;
       throw InvalidFormatException('Invalid Data Format');
     } catch (e) {
 
     
          CustomSnackBar.buildErrorSnackbar(context!,e.toString());
+            // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+            _ref.watch(authControllerProvider.notifier).state=false;
       throw UnknownException(e.toString());
     }
   }
@@ -102,6 +108,7 @@ var data =jsonDecode(response.body);
         "passwordHash":password
       }));
 print(response.statusCode);
+
       switch (response.statusCode) {
         case 200:
  
@@ -109,27 +116,37 @@ print(response.statusCode);
 
        LocalStorageRepository localStorageRepository = LocalStorageRepository();
         localStorageRepository.setToken(data['token']);
+        localStorageRepository.saveEmail(email);
 
 
         print(localStorageRepository.getToken());
+              print(localStorageRepository.getEmail());
           // storeUserTokenInSharedPref(data['accessToken']);
           // UserModel? rNetUser = await getUserData(email);
-          return await getUserData(context,email);
+          return await getUserData(context:context,email:email);
           // return 200;
         default:
           throw Exception(response.reasonPhrase);
       }
     } on SocketException {
+
       CustomSnackBar.buildErrorSnackbar(context, 'No Internet');
+       _ref.watch(authControllerProvider.notifier).state=false;
       throw NoInternetException('No Internet');
+
     } on HttpException {
       CustomSnackBar.buildErrorSnackbar(context, 'No Service Found');
+       _ref.watch(authControllerProvider.notifier).state=false;
       throw NoServiceFoundException('No Service Found');
     } on FormatException {
+
          CustomSnackBar.buildErrorSnackbar(context, 'Invalid Data Format');
+          _ref.watch(authControllerProvider.notifier).state=false;
       throw InvalidFormatException('Invalid Data Format');
     } catch (e) {
+
        CustomSnackBar.buildErrorSnackbar(context, e.toString());
+        _ref.watch(authControllerProvider.notifier).state=false;
       throw UnknownException(e.toString());
     }
   }
@@ -138,20 +155,22 @@ print(response.statusCode);
 
 
   //user Info data
-  Future<UserModel?> getUserData(BuildContext context,String email) async {
+  Future<UserModel?> getUserData({required BuildContext context, String? email}) async {
     try {
 
      String url = AppConstants.baseUrl + 'api/v1/users/getUserData';
 
       //  LocalStorageRepository localStorageRepository = LocalStorageRepository();
     var token  =await _localStorageRepository.getToken();
+    var email1 = await _localStorageRepository.getEmail();
   Uri uri = Uri.parse(url);
 
   print(token);
+    print(email1);
  http.Response response = await http.post(uri,
       headers: {'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
-      },body: json.encode({"email":email}));
+      },body: json.encode({"email":email1}));
 
     
       switch (response.statusCode) {

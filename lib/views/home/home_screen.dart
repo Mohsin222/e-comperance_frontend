@@ -1,6 +1,7 @@
 import 'package:e_comperce_app/controller/aurh_controller.dart';
 import 'package:e_comperce_app/controller/product_controller.dart';
 import 'package:e_comperce_app/repositary/auth_services/auth_services.dart';
+import 'package:e_comperce_app/repositary/load_data.dart';
 import 'package:e_comperce_app/services/filter_product.dart';
 import 'package:e_comperce_app/views/home/widgets/category_button.dart';
 import 'package:e_comperce_app/views/product/add_to_card_screen.dart';
@@ -15,30 +16,41 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../controller/order_controller.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
    HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context , WidgetRef ref) {
+ ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  Widget build(BuildContext context ) {
     final user =ref.watch(userProvider);
-    final productProvider =ref.watch(prodcutListProvider);
+    final productProvider =ref.watch(prodcutListProvider.notifier);
     final categoryListProv =ref.watch(categoryListProvider);
     
-    final featuredProductList =FilterProducts.filterProductWithIsFeatured(productModel: productProvider!.productModel,ref: ref);
+   
+       final featuredProductList =FilterProducts.filterProductWithIsFeatured(ref: ref);
+    // final featuredProductList =FilterProducts.filterProductWithIsFeatured(productModel: productProvider.productModel,ref: ref);
     return  Scaffold(
       appBar: AppBar(
+
         backgroundColor: Colors.white,
         actions: [
-          IconButton(onPressed: (){
-            ref.watch(orderControllerProvider.notifier).getUserOrders(context, user?.sId);
-          }, icon:Icon(Icons.add)),
+          IconButton(onPressed: ()async{
+  
+            // print(user!.sId);
+            print('111');
+            //  await   LoadData.getUserData(context: context, ref: ref);
+          }, icon:Icon(Icons.add,color: Color.fromARGB(255, 8, 8, 8))),
           IconButton(onPressed: ()async{
         // await  AuthRepository.products();
        
         Navigator.push(context, MaterialPageRoute(builder: (context)=>CartListScreen()));
         }, icon: const Icon(Icons.shopping_cart,color: Colors.black,))],
         centerTitle: true,
-        title: Text('HOME SCREEN',style: TextStyle(color: Colors.black,fontSize: 13.sp),),
+        title: Text(user!.email.toString(),style: TextStyle(color: Colors.black,fontSize: 13.sp),),
       ),
       body:Container(
           margin: EdgeInsets.symmetric(horizontal: 10.h),
@@ -101,6 +113,5 @@ class HomeScreen extends ConsumerWidget {
       
     );
   }
-
 }
 

@@ -70,102 +70,91 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authContProv = ref.watch(authControllerProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 15.w),
         child: Form(
           key: _formKey,
-          child: Column(children: [
-            SizedBox(
-              height: 39.h,
-            ),
-            Lottie.network(
-                'https://lottie.host/9fa8be04-804a-49bc-80e2-fb1063434590/44ifbEWgqt.json',
-                repeat: true),
-            TextFormField(
-              controller: _emailController,
-              decoration: TextFieldDecoration.decoration(
-                hintTxt: 'Email',
+          child: SingleChildScrollView(
+            child: Column(children: [
+              SizedBox(
+                height: 39.h,
               ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Email cannot be empty";
-                } else if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                    .hasMatch(value)) {
-                  return "Please enter a valid email";
-                }
-
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: _passwordController,
-              decoration: TextFieldDecoration.decoration(hintTxt: 'Password'),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Password cannot be empty";
-                }
-                return null;
-              },
-            ),
-            GestureDetector(
-              onTap: () {
-              // Add your onPress function here
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpScreen()));
-            },
-              child: RichText(
-                text: const TextSpan(
-                    text: "Don'\t have an Account  ",
-                    style: TextStyle(color: Colors.black),
-                    children: [
-                      TextSpan(
-                        
-                        text: 'SignUp',
-                        // moh@g.com
-                        // recognizer:TapGestureRecognizer()..onTap = () => print("The word touched i"),
-                    
-                        style: TextStyle(color: Colors.pinkAccent),
-                      )
-                    ]),
+              Lottie.network(
+                  'https://lottie.host/9fa8be04-804a-49bc-80e2-fb1063434590/44ifbEWgqt.json',
+                  repeat: true),
+              TextFormField(
+                controller: _emailController,
+                decoration: TextFieldDecoration.decoration(
+                  hintTxt: 'Email',
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Email cannot be empty";
+                  } else if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                      .hasMatch(value)) {
+                    return "Please enter a valid email";
+                  }
+          
+                  return null;
+                },
               ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            SizedBox(
-              // padding: const EdgeInsets.all(8.0),
-              width: 1.sw,
-              height: 50.h,
-              child: ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await signIn(ref);
-
-
-
-
-                      //  await   AuthRepository.getUserData(_emailController.text.toString());
-
-                      //  ref.watch(authControllerProvider.notifier).signUp(
-
-                      //       context,
-
-                      //       _emailController.text.trim(),
-
-                      //       _passwordController.text.trim(),
-
-                      //     );
-
-                      // await AuthRepository.signIn(context: context, email: _emailController.text.trim(), password: _passwordController.text.trim());
-                    }
-                  },
-                  child: Text('LOGIN',style: TextStyle(letterSpacing: 2),)),
-            )
-          ]),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: TextFieldDecoration.decoration(hintTxt: 'Password'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Password cannot be empty";
+                  }
+                  return null;
+                },
+              ),
+              GestureDetector(
+                onTap: () {
+                // Add your onPress function here
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpScreen()));
+              },
+                child: RichText(
+                  text: const TextSpan(
+                      text: "Don'\t have an Account  ",
+                      style: TextStyle(color: Colors.black),
+                      children: [
+                        TextSpan(
+                          
+                          text: 'SignUp',
+                          // moh@g.com
+                          // recognizer:TapGestureRecognizer()..onTap = () => print("The word touched i"),
+                      
+                          style: TextStyle(color: Colors.pinkAccent),
+                        )
+                      ]),
+                ),
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              SizedBox(
+                // padding: const EdgeInsets.all(8.0),
+                width: 1.sw,
+                height: 50.h,
+                child: ElevatedButton(
+                    onPressed:authContProv==false ? () async {
+                      if (_formKey.currentState!.validate()) {
+                        await signIn(ref);
+        
+                      }
+                    }:null,
+                    child:authContProv==false ? Text('LOGIN',style: TextStyle(letterSpacing: 2),)
+                    :Center(child: CircularProgressIndicator(),)
+                    ),
+              )
+            ]),
+          ),
         ),
       ),
     );

@@ -26,6 +26,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
    await Future.delayed(Duration(seconds: 0),()async{
             await   LoadData.getProductData(context: context, ref: ref);
         await   LoadData.getCategoryData(context: context, ref: ref);
+        await LoadData.getUserData(context: context, ref: ref);
     }).then((value) {
           Navigator.push(context, MaterialPageRoute(builder: (context)=> CustomBottomNavigationBar()));
 

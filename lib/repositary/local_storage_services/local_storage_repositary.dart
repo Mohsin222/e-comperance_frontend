@@ -19,4 +19,15 @@ class LocalStorageRepository {
     preferences.setString('userType', userType);
   }
 
+
+   void saveEmail(String email) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('email', email);
+  }
+   Future<String?> getEmail() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? email = preferences.getString('email');
+    return email;
+  }
+
 }

@@ -3,6 +3,7 @@ import 'package:e_comperce_app/views/auth/signup_screen.dart';
 import 'package:e_comperce_app/views/home/home_screen.dart';
 import 'package:e_comperce_app/views/product/user_orders.dart';
 import 'package:event_bus/event_bus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -105,21 +106,21 @@ HomeScreen(),
             },
               backgroundColor: Colors.transparent,
             type: BottomNavigationBarType.shifting,
-            items: [  BottomNavigationBarItem(
-        icon: Icon(Icons.call),
+            items: const [  BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+     label: 'Home',
+      ),
+        BottomNavigationBarItem(
+        icon: Icon(CupertinoIcons.gift_alt_fill),
+        label: 'Products',
+      ),
+        BottomNavigationBarItem(
+        icon:Icon( CupertinoIcons.cart),
         label: 'Calls',
       ),
         BottomNavigationBarItem(
-        icon: Icon(Icons.call),
-        label: 'Calls',
-      ),
-        BottomNavigationBarItem(
-        icon: Icon(Icons.call),
-        label: 'Calls',
-      ),
-        BottomNavigationBarItem(
-        icon: Icon(Icons.call),
-        label: 'Calls',
+        icon:Icon( CupertinoIcons.profile_circled),
+        label: 'Profile',
       ),
       ],
           )),

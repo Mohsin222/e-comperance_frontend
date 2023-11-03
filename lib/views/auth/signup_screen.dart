@@ -3,6 +3,7 @@ import 'package:e_comperce_app/models/user_model.dart';
 import 'package:e_comperce_app/repositary/auth_services/auth_services.dart';
 import 'package:e_comperce_app/utils/text_field_decoration.dart';
 import 'package:e_comperce_app/views/auth/login_screen.dart';
+import 'package:e_comperce_app/views/widgets/custom_snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -35,6 +36,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     _confPasswordController.dispose();
     _passwordController.dispose();
     _nameController.dispose();
+    _phoneController.dispose();
   }
 
   //Sign In User
@@ -45,7 +47,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           userModel
    
         );
-   _moveToLogin();
+
+        Future.delayed(Duration(seconds: 1),(){
+
+
+        _moveToLogin();  
+        });
+
 
   }
 void _moveToLogin() {
@@ -60,6 +68,7 @@ void _moveToLogin() {
   @override
   Widget build(BuildContext context) {
     // final isloading= ref.watch(authControllerProvider);
+       final authContProv = ref.watch(authControllerProvider);
     print(isLoading);
     return  Scaffold(
       body: Container(
@@ -178,10 +187,11 @@ child: Form(
               width: 1.sw,
               height: 50.h,
               child: ElevatedButton(
-                  onPressed:isLoading ==false ? () async {
+                  onPressed:authContProv ==false ? () async {
                     if (_formKey.currentState!.validate()) {
                       // await signIn(ref);
                       if(_passwordController.text.trim() !=_confPasswordController.text.trim()){
+                              CustomSnackBar.buildErrorSnackbar(context, 'Password and conform password not match');
                         print('PASSWORD and Conform password not match');
                       }else{
                         UserModel? userModel =UserModel(
@@ -198,7 +208,7 @@ child: Form(
 
                     }
                   }:null,
-                  child: isLoading==false ?Text('SIGN UP',style: TextStyle(letterSpacing: 2),):Center(child: CircularProgressIndicator(color: Colors.white,),)),
+                  child: authContProv==false ?Text('SIGN UP',style: TextStyle(letterSpacing: 2),):Center(child: CircularProgressIndicator(color: Colors.white,),)),
             )
   ]),
 )),

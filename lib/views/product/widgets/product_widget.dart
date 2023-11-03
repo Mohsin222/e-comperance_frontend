@@ -111,7 +111,7 @@ children: [
       print("out of stock");
      }
      else{
-  CartModel? cartModel = CartModel(productId: productModel!.sId,quantity: 1.0,productModel: productModel);
+  CartModel? cartModel = CartModel(productId: productModel!.sId,quantity: 1,productModel: productModel);
   
   
   // print(cartModel.quantity);

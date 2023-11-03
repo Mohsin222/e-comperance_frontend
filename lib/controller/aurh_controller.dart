@@ -54,6 +54,24 @@ state = user;
 
   
   }
+ Future getuserData(BuildContext context,) async {
+    state = true;
+
+    
+     UserModel? user =    await _authRepository.getUserData(context:context, );
+
+
+    // print(user);
+        state = false;
+    _ref.read(userProvider.notifier).update((state){
+state = user;
+      return state;
+
+    });
+
+  
+  }
+
 
 
 

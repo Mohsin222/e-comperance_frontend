@@ -1,6 +1,7 @@
 
 
 
+import 'package:e_comperce_app/controller/cart_controller.dart';
 import 'package:e_comperce_app/models/cart_model.dart';
 import 'package:e_comperce_app/models/order_model.dart';
 import 'package:e_comperce_app/repositary/local_storage_services/local_storage_repositary.dart';
@@ -44,7 +45,8 @@ class OrderController extends StateNotifier<bool>{
         state = false;
 
 
-  
+  _ref.watch(cartListProvider.notifier).state=[];
+_ref.watch(totalPriceProvider.notifier).state=0;
   }
 
 
