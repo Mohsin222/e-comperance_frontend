@@ -37,7 +37,7 @@ class OrderController extends StateNotifier<bool>{
         super(false);
 
         Future<void> placeYourOrder(BuildContext context, OrderModel? orderModel) async {
-    // state = true;
+    state = true;
    await _orderRepositaryClass.placeOrder(context:context,orderModel: orderModel);
 
 
@@ -48,6 +48,10 @@ class OrderController extends StateNotifier<bool>{
   _ref.watch(cartListProvider.notifier).state=[];
 _ref.watch(totalPriceProvider.notifier).state=0;
   }
+
+
+
+  
 
 
 

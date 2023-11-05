@@ -1,17 +1,24 @@
+import 'dart:convert';
+
 import 'package:e_comperce_app/controller/aurh_controller.dart';
 import 'package:e_comperce_app/controller/cart_controller.dart';
 import 'package:e_comperce_app/controller/order_controller.dart';
 import 'package:e_comperce_app/controller/product_controller.dart';
 import 'package:e_comperce_app/models/order_model.dart';
+import 'package:e_comperce_app/repositary/api_response_helper.dart';
+import 'package:e_comperce_app/repositary/order_services/order_service.dart';
 import 'package:e_comperce_app/services/filter_product.dart';
 import 'package:e_comperce_app/utils/text_field_decoration.dart';
 import 'package:e_comperce_app/views/splash/splash_screen.dart';
+import 'package:e_comperce_app/views/widgets/bottom_bar_widget.dart';
+import 'package:e_comperce_app/views/widgets/custom_snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:http/http.dart' as http;
 class OrderScreen extends ConsumerStatefulWidget {
    OrderScreen({super.key});
 
@@ -29,6 +36,96 @@ TextEditingController zipCodeController =TextEditingController();
 TextEditingController countryController =TextEditingController();
 TextEditingController shippingAddress1Controller =TextEditingController();
 TextEditingController shippingAddress2Controller =TextEditingController();
+Map<String,dynamic>? paymentIntentData;
+
+
+  createPaymentIntent(String textEditingController, String currency)async{
+    try {
+      Map<String,dynamic> body ={
+        "amount": 222.toString(),
+        "currency":currency,
+        "payment_method_types[]":"card"
+      };
+
+      var response =await  http.post(Uri.parse('https://api.stripe.com/v1/payment_intents'),
+      
+    
+      headers: {
+        "Authorization":'Bearer sk_test_51IMtIYCIzz5B7On2eHMccJ3W6UkNzbguxQ8WH73V8RXbaFmzvihKVjja1hyz25BbZ3mBTo9ZDegAHWuH5vQpvBhn00pLyl74Hl',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+        body: body,
+      );
+
+      return jsonDecode(response.body);
+    } catch (e) {
+       print('Exception  createPaymentIntent errro '+e.toString());
+    }
+  }
+
+ Future<void> makePayment({required OrderModel orderModel})async{
+    try {
+      paymentIntentData =await ref.watch(orderRepositaryClassProvider).createPaymentIntent( amount: calcuateAmount(ref.watch(totalPriceProvider)!.round().toString()),currency: "USD",context: context);
+
+      await Stripe.instance.initPaymentSheet(paymentSheetParameters: SetupPaymentSheetParameters(
+        paymentIntentClientSecret: paymentIntentData!['client_secret'],
+        // applePay: const PaymentSheetApplePay(merchantCountryCode: '+92'),
+        // googlePay: const PaymentSheetGooglePay(testEnv: true,  merchantCountryCode: '+92'),
+        style: ThemeMode.dark,
+        
+        merchantDisplayName: 'MOHSIN'
+      ));
+       displayPayentSheet(orderModel: orderModel);
+
+    } catch (e) {
+      print('Exception '+e.toString());
+    }
+  }
+
+
+    displayPayentSheet({required OrderModel orderModel})async{
+try {
+ await Stripe.instance.presentPaymentSheet(
+   
+    // options: PaymentSheetPresentOptions(
+      
+    // )
+  ).then((value)async {
+     print('done');
+      // showDialog(context: context, builder: (context)=>AlertDialog(content: Text('paid Successfully'),));
+
+await ref.watch(orderControllerProvider.notifier).placeYourOrder(context, orderModel);
+
+
+
+//remove items from list
+FilterProducts.removeItemCountWhenOrderPlace(ref: ref,
+cartitems: orderModel.orderItems!,
+productId: orderModel.orderItems![0].productId);
+
+Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const CustomBottomNavigationBar()));
+  });
+
+  setState(() {
+    paymentIntentData=null;
+  });
+
+
+} on StripeException catch(e){
+  print(e.toString());
+  showDialog(context: context, builder: (context)=>AlertDialog(content: Text(e.toString()),));
+}
+  }
+
+  
+  calcuateAmount(String amount){
+    final price = int.parse(amount) * 100;
+
+    print(price);
+    return price.toString();
+
+
+  }
 
 var spaceBtn =SizedBox(height: 10.h,);
 
@@ -44,6 +141,8 @@ var spaceBtn =SizedBox(height: 10.h,);
     shippingAddress1Controller.dispose();
     shippingAddress2Controller.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +246,9 @@ spaceBtn,
               maxLines: 4,
                       ),
        SizedBox(height: 20.h,),
+       ElevatedButton(onPressed: ()async{
+    //  await   makePayment();
+       }, child: Text('aa')),
 
                          Container(
                padding: const EdgeInsets.all(8.0),
@@ -179,11 +281,9 @@ spaceBtn,
             // );
 
             // print(ref.watch(cartListProvider));
-await ref.watch(orderControllerProvider.notifier).placeYourOrder(context, orderModel);
 
-FilterProducts.removeItemCountWhenOrderPlace(ref: ref,
-cartitems: orderModel.orderItems!,
-productId: orderModel.orderItems![0].productId);
+makePayment(orderModel: orderModel);
+
 
 
 // var d=ref.watch(cartListProvider);
@@ -192,9 +292,8 @@ productId: orderModel.orderItems![0].productId);
 
 
 
-
 // Navigator.popUntil(context, (route) => false);
-// Navigator.push(context, MaterialPageRoute(builder: (context)=> const SplashScreen()));
+
           }
               }:null, child:ref.watch(orderControllerProvider.notifier).state==false ? const Text('ORDER'):CircularProgressIndicator())),
 

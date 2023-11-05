@@ -13,7 +13,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: AppBar(
-        backgroundColor: Colors.pink[400],
+        // backgroundColor: Colors.pink[400],
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: showBackArrow ? IconButton(onPressed: (){
           Navigator.pop(context);

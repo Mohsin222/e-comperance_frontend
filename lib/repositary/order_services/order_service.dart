@@ -9,6 +9,7 @@ import 'package:e_comperce_app/models/order_model.dart';
 import 'package:e_comperce_app/models/product_list_model.dart';
 import 'package:e_comperce_app/repositary/api_response_helper.dart';
 import 'package:e_comperce_app/repositary/local_storage_services/local_storage_repositary.dart';
+import 'package:e_comperce_app/views/widgets/custom_snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
@@ -83,15 +84,54 @@ return 200;
           throw Exception(response.reasonPhrase);
       }
     } on SocketException {
-
+          CustomSnackBar.buildErrorSnackbar(context, 'No Internet');
+               _ref.watch(orderControllerProvider.notifier).state=false;
       
       throw NoInternetException('No Internet');
     } on HttpException {
+                CustomSnackBar.buildErrorSnackbar(context, 'No Service Found');
+               _ref.watch(orderControllerProvider.notifier).state=false;
       throw NoServiceFoundException('No Service Found');
     } on FormatException {
+                CustomSnackBar.buildErrorSnackbar(context, 'Invalid Data Format');
+               _ref.watch(orderControllerProvider.notifier).state=false;
       throw InvalidFormatException('Invalid Data Format');
     } catch (e) {
+               CustomSnackBar.buildErrorSnackbar(context, e.toString());
+               _ref.watch(orderControllerProvider.notifier).state=false;
       throw UnknownException(e.toString());
+    }
+  }
+
+
+//stripe function
+  createPaymentIntent({required String amount, required String currency,required BuildContext context})async{
+    try {
+
+
+      
+      Map<String,dynamic> body ={
+        "amount": amount,
+        "currency":currency,
+        "payment_method_types[]":"card"
+      };
+
+      var response =await  _client.post(Uri.parse('https://api.stripe.com/v1/payment_intents'),
+      
+    
+      headers: {
+        "Authorization":'Bearer sk_test_51IMtIYCIzz5B7On2eHMccJ3W6UkNzbguxQ8WH73V8RXbaFmzvihKVjja1hyz25BbZ3mBTo9ZDegAHWuH5vQpvBhn00pLyl74Hl',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+        body: body,
+      );
+
+      return jsonDecode(response.body);
+    } catch (e) {
+            CustomSnackBar.buildErrorSnackbar(context, e.toString());
+               _ref.watch(orderControllerProvider.notifier).state=false;
+       print('Exception  createPaymentIntent errro '+e.toString());
+             throw NoInternetException(e.toString());
     }
   }
 

@@ -40,7 +40,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       backgroundColor: Colors.pinkAccent,
       body: Center(child: InkWell(
         onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomBottomNavigationBar()));
         },
         
         child: Text("E CONERANCE")),),

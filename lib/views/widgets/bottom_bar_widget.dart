@@ -70,7 +70,7 @@ SettingsScreen()
     
       bottomNavigationBar: Container(
         
-          height: 0.1.sh,
+          // height: 0.1.sh,
             decoration: BoxDecoration(
             color: const Color(0xffFFFFFF),
             borderRadius: BorderRadius.only(

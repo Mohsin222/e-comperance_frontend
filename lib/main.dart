@@ -1,11 +1,15 @@
+import 'package:e_comperce_app/practice/stripe/stripe.dart';
 import 'package:e_comperce_app/views/auth/login_screen.dart';
 import 'package:e_comperce_app/views/auth/signup_screen.dart';
 import 'package:e_comperce_app/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
-void main() {
+void main()async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey='pk_test_51IMtIYCIzz5B7On2k2MBzHgwMYwWCci2bLRmUoIURWRvzGmhmJp3TneBYBGGrtja15vdF6adzpOy1Rz62T1aE4pD00SwmyE3b3';
  runApp(ProviderScope( child: MyApp()));
 }
 
@@ -26,7 +30,7 @@ class MyApp extends StatelessWidget {
             
             primarySwatch: Colors.pink,
           ),
-          home: const SplashScreen(),
+          home:  SplashScreen(),
         );
       }
     );

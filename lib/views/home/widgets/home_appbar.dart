@@ -1,3 +1,4 @@
+import 'package:e_comperce_app/views/product/add_to_card_screen.dart';
 import 'package:e_comperce_app/views/widgets/appbar/custom_appbar.dart';
 import 'package:e_comperce_app/views/widgets/appbar/custom_cart_icon.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,11 @@ class CustomHomeAppbar extends StatelessWidget {
      ],
     ),
     actions: [
-     CustomCartCounterIcon(iconColor: Colors.white,)
+     CustomCartCounterIcon(iconColor: Colors.white,
+     onpress: (){
+Navigator.push(context, MaterialPageRoute(builder: (context)=>CartListScreen()));
+     },
+     )
     ],
     );
   }
