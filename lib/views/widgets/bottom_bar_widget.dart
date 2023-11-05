@@ -2,6 +2,7 @@ import 'package:e_comperce_app/services/event_bus_services/event_bus_services.da
 import 'package:e_comperce_app/views/auth/signup_screen.dart';
 import 'package:e_comperce_app/views/home/home_screen.dart';
 import 'package:e_comperce_app/views/product/user_orders.dart';
+import 'package:e_comperce_app/views/settings/settings_screen.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,8 @@ class _CustomBottomNavigationBarState extends ConsumerState<CustomBottomNavigati
 HomeScreen(),
  const Scaffold(body: Center(child: Text("2222"))),
    UserOrders(),
-   const Scaffold(body: Center(child: Text("4444"))),
- const Scaffold(body: Center(child: Text("5555"))),
+
+SettingsScreen()
   ];
    var bottomNavTextStyle =
         TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600);

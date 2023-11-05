@@ -15,16 +15,17 @@ class CategoryButton extends StatelessWidget {
     return InkWell(
       onTap: onpress,
       child: Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 207, 25, 89),
+                  // color: const Color.fromARGB(255, 207, 25, 89),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(6.r)
                 ),
                   
                   
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
                   child: Text(category!.name.toString(),
-                  style: const TextStyle(color: Colors.white,letterSpacing: 2),
+                  style: const TextStyle(color: Colors.black,letterSpacing: 2),
                   ),
                   
                   ),

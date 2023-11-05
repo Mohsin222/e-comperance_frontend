@@ -3,6 +3,7 @@ import 'package:e_comperce_app/repositary/load_data.dart';
 import 'package:e_comperce_app/utils/text_field_decoration.dart';
 import 'package:e_comperce_app/views/auth/signup_screen.dart';
 import 'package:e_comperce_app/views/home/home_screen.dart';
+import 'package:e_comperce_app/views/widgets/bottom_bar_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -47,12 +48,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   nextScreen();
   }
 
-    nextScreen()async{
+   nextScreen()async{
    await Future.delayed(Duration(seconds: 0),()async{
             await   LoadData.getProductData(context: context, ref: ref);
- await   LoadData.getCategoryData(context: context, ref: ref);
+        await   LoadData.getCategoryData(context: context, ref: ref);
+        await LoadData.getUserData(context: context, ref: ref);
     }).then((value) {
-          _completeLogin();
+         _completeLogin();
 
     }).catchError((err){
       print(err);
@@ -63,7 +65,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Navigator.pushReplacement<void, void>(
     context,
     MaterialPageRoute<void>(
-      builder: (BuildContext context) =>  HomeScreen(),
+      builder: (BuildContext context) =>  CustomBottomNavigationBar(),
     ),
   );
 }

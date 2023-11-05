@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TextFieldDecoration{
 
@@ -18,5 +19,34 @@ class TextFieldDecoration{
                     hintText:hintTxt ?? '',
                     helperText: helperText ?? ''
                   );
+                  }
+
+
+
+                  //home screen textfield decoration
+
+                  static homeTextFieldDecoration({String? hintText}){
+                    return InputDecoration(
+                      hintText: hintText,
+               prefix:  Icon(Icons.search,color: Colors.black,),
+   
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintStyle:  TextStyle(fontSize: 15.sp),
+                      //  border: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.white,
+                      //  ),),
+                          contentPadding: EdgeInsets.all(10.0),
+                           enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(width:1, color: Colors.white),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 1, color: Colors.white),
+                  borderRadius: BorderRadius.circular(15),
+                )
+                       
+                    );
+                
                   }
 }
