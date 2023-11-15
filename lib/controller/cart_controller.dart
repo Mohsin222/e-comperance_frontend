@@ -49,9 +49,13 @@ class CartController extends StateNotifier<bool> {
 
     _ref.read(cartListProvider.notifier).update((state){
 state!.add(cartModel!);
+
+
 return state;
 
     });
+
+
 
 }
 incrementCartQuantity({required BuildContext context,required int index, required int value,CartModel? cartModel }){

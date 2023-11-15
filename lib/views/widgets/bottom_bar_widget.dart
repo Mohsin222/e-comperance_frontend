@@ -1,6 +1,7 @@
 import 'package:e_comperce_app/services/event_bus_services/event_bus_services.dart';
 import 'package:e_comperce_app/views/auth/signup_screen.dart';
 import 'package:e_comperce_app/views/home/home_screen.dart';
+import 'package:e_comperce_app/views/product/product_screen.dart';
 import 'package:e_comperce_app/views/product/user_orders.dart';
 import 'package:e_comperce_app/views/settings/settings_screen.dart';
 import 'package:event_bus/event_bus.dart';
@@ -56,7 +57,8 @@ class _CustomBottomNavigationBarState extends ConsumerState<CustomBottomNavigati
 
  final List screens = <Widget>[
 HomeScreen(),
- const Scaffold(body: Center(child: Text("2222"))),
+//  const Scaffold(body: Center(child: Text("2222"))),
+ProductScreen(),
    UserOrders(),
 
 SettingsScreen()

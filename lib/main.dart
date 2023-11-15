@@ -1,3 +1,5 @@
+import 'package:e_comperce_app/pp.dart';
+import 'package:e_comperce_app/pract_pagination.dart';
 import 'package:e_comperce_app/practice/stripe/stripe.dart';
 import 'package:e_comperce_app/views/auth/login_screen.dart';
 import 'package:e_comperce_app/views/auth/signup_screen.dart';

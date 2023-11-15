@@ -27,7 +27,8 @@ class TextFieldDecoration{
 
                   static homeTextFieldDecoration({String? hintText}){
                     return InputDecoration(
-                      hintText: hintText,
+                      
+                      // hintText: hintText,
                prefix:  Icon(Icons.search,color: Colors.black,),
    
                       fillColor: Colors.white,

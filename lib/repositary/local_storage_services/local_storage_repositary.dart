@@ -13,6 +13,14 @@ class LocalStorageRepository {
     String? token = preferences.getString('Authorization');
     return token;
   }
+Future removeToken() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+ var d =  await preferences.remove('Authorization');
+
+ return d;
+   
+  }
+
    //Set token to Authorization header to check if user is logged in or not
   void setUserType(String userType) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

@@ -246,9 +246,7 @@ spaceBtn,
               maxLines: 4,
                       ),
        SizedBox(height: 20.h,),
-       ElevatedButton(onPressed: ()async{
-    //  await   makePayment();
-       }, child: Text('aa')),
+   
 
                          Container(
                padding: const EdgeInsets.all(8.0),

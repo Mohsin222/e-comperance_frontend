@@ -10,11 +10,17 @@ class FilterProducts{
     required WidgetRef ref,
   }){
    final categValue= ref.watch(categoryValue);
+     final searchVal=ref.watch(seachValue);
          var productProvider =ref.watch(prodcutListProvider)!.productModel;
       if(categValue !='All'){
 
 productProvider=showProductWithCategory(productModel: productProvider,ref: ref);
       }
+      if(searchVal !=''){
+  return productProvider!.where((element) => element.name!.contains(searchVal)).toList();
+}
+
+      
 
 return productProvider!.where((element) => element.isFeatured==true).toList();
   }
@@ -30,6 +36,29 @@ return productProvider!.where((element) => element.isFeatured==true).toList();
 return productModel!.where((element) => element.category!.name==categValue).toList();
 
   }
+
+
+//search product
+    static List<ProductModel>? searchProduct({
+     required List<ProductModel>? productModel,
+    required WidgetRef ref,
+    
+  }){
+
+
+   final searchVal=ref.watch(seachValue);
+// ignore: unrelated_type_equality_checks
+// return productModel!.contains((element) => element.category!.name==categValue).toList();//
+if(searchVal !=''){
+  return productModel!.where((element) => element.name!.contains(searchVal)).toList();
+}else{
+  return productModel;
+}
+
+
+
+  }
+
 
 
 
@@ -52,6 +81,28 @@ final filterProductTOShowWithCart=ref.watch(filterProductTOShowWithCartProvider)
 return mdl;
   }
 
+
+
+  //filterProduct with CategoryAndSeacrch
+  static List<ProductModel>? filterProductWithCategoryAndSearch({
+    //  required List<ProductModel>? productModel,
+    required WidgetRef ref,
+  }){
+   final categValue= ref.watch(categoryValue);
+     final searchVal=ref.watch(seachValue);
+         var productProvider =ref.watch(prodcutListProvider)!.productModel;
+      if(categValue !='All'){
+
+productProvider=showProductWithCategory(productModel: productProvider,ref: ref);
+      }
+      if(searchVal !=''){
+  return productProvider!.where((element) => element.name!.contains(searchVal)).toList();
+}
+
+      
+
+return productProvider!;
+  }
 
   //check its already present in cart
 

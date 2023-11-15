@@ -1,13 +1,17 @@
+import 'package:e_comperce_app/controller/aurh_controller.dart';
+import 'package:e_comperce_app/views/settings/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomProfileTile extends StatelessWidget {
+class CustomProfileTile extends ConsumerWidget {
   const CustomProfileTile({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+     final userprov =ref.watch(userProvider);
     return ListTile(
       leading: CircleAvatar(
         radius: 30.r,
@@ -15,9 +19,11 @@ class CustomProfileTile extends StatelessWidget {
         
         
       ),
-      title: Text('Name',style: TextStyle(fontSize: 14.sp,color: Colors.white),),
-      subtitle: Text('mmm@gmail.com',style: TextStyle(fontSize: 14.sp,color: Colors.white),),
-      trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit,color: Colors.white,)),
+      title: Text(userprov!.name ?? '',style: TextStyle(fontSize: 14.sp,color: Colors.white),),
+      subtitle: Text(userprov.email ?? '',style: TextStyle(fontSize: 14.sp,color: Colors.white),),
+      trailing: IconButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
+      }, icon: Icon(Icons.edit,color: Colors.white,)),
     );
   }
 }

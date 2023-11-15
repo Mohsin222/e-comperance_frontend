@@ -12,9 +12,10 @@ class SettingMenuTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      leading: Icon(icon, size: 20,color: Colors.black,),
-        title: Text(title,style: TextStyle(fontSize: 14.sp,color: Colors.black),),
-      subtitle: Text(subtitle,style: TextStyle(fontSize: 14.sp,color: Colors.black),),
+      // contentPadding: EdgeInsets.zero,
+      leading: Icon(icon, size: 25,color: Colors.black,),
+        title: Text(title,style: TextStyle(fontSize: 15.sp,color: Colors.black),),
+      subtitle: Text(subtitle,style: TextStyle(fontSize: 12.sp,color: Colors.black54),),
       trailing: trailing,
       onTap: onTap,
     );

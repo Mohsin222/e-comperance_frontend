@@ -13,6 +13,7 @@ final categoryListProvider = StateProvider<List<Category?>>((ref) => [
 ]);
 
 final categoryValue = StateProvider<String>((ref) => 'All');
+final seachValue = StateProvider<String>((ref) => '');
 // final totalPriceProvider = StateProvider<double?>((ref) => 0);
 // final cartListProvider = StateProvider<List<CartModel>?>((ref) => []);
 

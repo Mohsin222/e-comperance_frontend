@@ -152,21 +152,80 @@ print(response.statusCode);
   }
 
 
+  //update user
+    Future updateUser({ required  context,required UserModel? userModel}) async {
+    try {
+
+
+ var token  =await _localStorageRepository.getToken();
+
+     String url = '${AppConstants.baseUrl}api/v1/users/update/${userModel!.sId}';
+
+  Uri uri = Uri.parse(url);
+  print(uri);
+ http.Response response = await http.put(uri,
+      headers: {'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+      }, body: json.encode(
+        userModel.toJson()
+      
+      ));
+print(response.statusCode);
+
+      switch (response.statusCode) {
+        case 200:
+ 
+          var data = await jsonDecode(response.body);
+
+
+
+         
+          return await getUserData(context:context,email:userModel.email);
+          // return 200;
+        default:
+          throw Exception(response.reasonPhrase);
+      }
+    } on SocketException {
+
+      CustomSnackBar.buildErrorSnackbar(context, 'No Internet');
+       _ref.watch(authControllerProvider.notifier).state=false;
+      throw NoInternetException('No Internet');
+
+    } on HttpException {
+      CustomSnackBar.buildErrorSnackbar(context, 'No Service Found');
+       _ref.watch(authControllerProvider.notifier).state=false;
+      throw NoServiceFoundException('No Service Found');
+    } on FormatException {
+
+         CustomSnackBar.buildErrorSnackbar(context, 'Invalid Data Format');
+          // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+          _ref.watch(authControllerProvider.notifier).state=false;
+      throw InvalidFormatException('Invalid Data Format');
+    } catch (e) {
+
+       CustomSnackBar.buildErrorSnackbar(context, e.toString());
+        _ref.watch(authControllerProvider.notifier).state=false;
+      throw UnknownException(e.toString());
+    }
+  }
+
+
+
 
 
   //user Info data
   Future<UserModel?> getUserData({required BuildContext context, String? email}) async {
     try {
 
-     String url = AppConstants.baseUrl + 'api/v1/users/getUserData';
+     String url = '${AppConstants.baseUrl}api/v1/users/getUserData';
 
       //  LocalStorageRepository localStorageRepository = LocalStorageRepository();
     var token  =await _localStorageRepository.getToken();
     var email1 = await _localStorageRepository.getEmail();
   Uri uri = Uri.parse(url);
 
-  print(token);
-    print(email1);
+  // print(token);
+  //   print(email1);
  http.Response response = await http.post(uri,
       headers: {'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',

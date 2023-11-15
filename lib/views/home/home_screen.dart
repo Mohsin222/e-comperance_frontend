@@ -7,7 +7,7 @@ import 'package:e_comperce_app/utils/text_field_decoration.dart';
 import 'package:e_comperce_app/views/home/widgets/category_button.dart';
 import 'package:e_comperce_app/views/home/widgets/home_appbar.dart';
 import 'package:e_comperce_app/views/product/add_to_card_screen.dart';
-import 'package:e_comperce_app/views/product/widgets/product_detail_card.dart';
+import 'package:e_comperce_app/views/product/product_detail_screen.dart';
 import 'package:e_comperce_app/views/product/widgets/product_widget.dart';
 import 'package:e_comperce_app/views/widgets/bottom_bar_widget.dart';
 import 'package:e_comperce_app/views/widgets/custm_primary_header.dart';
@@ -27,6 +27,27 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  TextEditingController searchController=TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    searchController.dispose();
+  }
+
+  
+
+
+  giveinitialValToField(){
+          searchController.text =ref.watch(seachValue);
+  }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+  }
   @override
   Widget build(BuildContext context ) {
     final user =ref.watch(userProvider);
@@ -35,6 +56,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     
    
        final featuredProductList =FilterProducts.filterProductWithIsFeatured(ref: ref);
+  
+giveinitialValToField();
     // final featuredProductList =FilterProducts.filterProductWithIsFeatured(productModel: productProvider.productModel,ref: ref);
     return  Scaffold(
       // appBar: AppBar(
@@ -67,18 +90,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                    CustomHomeAppbar(
                   
                    ),
+        
 
                 SizedBox(height: 12.h,),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10.w),
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
                   child: TextField(
-                    
+                    controller: searchController,
                     decoration: TextFieldDecoration.homeTextFieldDecoration(hintText: 'search'),
+                    
+                    onChanged: (v){
+                      // print(v);
+
+                      ref.read(seachValue.notifier).state=v;
+
+              
+                    },
                   )
                 ),
 
-                 SizedBox(height: 10.h,),
+                 SizedBox(height: 25.h,),
+                
               Container(
                  padding: EdgeInsets.symmetric(horizontal: 10.w),
                 alignment: Alignment.centerLeft,

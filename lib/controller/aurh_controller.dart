@@ -83,4 +83,17 @@ state = user;
       state = false;
   }
 
+
+     Future updateUser({required BuildContext context,UserModel? userModel}) async {
+    state = true;
+      UserModel? user =  await _authRepository.updateUser(context:context, userModel: userModel);
+      state = false;
+
+         _ref.read(userProvider.notifier).update((state){
+state = user;
+      return state;
+
+    });
+  }
+
 }

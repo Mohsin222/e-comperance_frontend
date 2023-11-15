@@ -1,3 +1,6 @@
+import 'package:e_comperce_app/controller/aurh_controller.dart';
+import 'package:e_comperce_app/repositary/local_storage_services/local_storage_repositary.dart';
+import 'package:e_comperce_app/views/auth/login_screen.dart';
 import 'package:e_comperce_app/views/settings/widgets/settings_menutile.dart';
 import 'package:e_comperce_app/views/widgets/appbar/custom_appbar.dart';
 import 'package:e_comperce_app/views/widgets/appbar/custom_cart_icon.dart';
@@ -17,6 +20,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+   
     return Scaffold(
 
       body: SingleChildScrollView(
@@ -27,7 +31,7 @@ class SettingsScreen extends ConsumerWidget {
 
               //  CustomHomeAppbar(), 
               CustomAppBar(
-                showBackArrow: true,
+           
                 title: Text('Account'),
               ),
               CustomProfileTile(),
@@ -44,7 +48,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
            //body
 
-              Padding(padding: EdgeInsets.all(32),
+              Padding(padding: EdgeInsets.all(10),
            child: Column(
             children: [
               
@@ -55,7 +59,21 @@ class SettingsScreen extends ConsumerWidget {
               Text('view all',style: TextStyle(fontSize: 14.sp),)
             ],
            ),
-              SettingMenuTile(icon:Icons.home,title: 'My Address',subtitle: 'Set Shopping dilivery Address',),
+              const SettingMenuTile(icon:Icons.home,title: 'My Address',subtitle: 'Set Shopping dilivery Address',),
+         
+              SettingMenuTile(icon:Icons.logout,title: 'Logout',subtitle: '',
+              
+              onTap: ()async{
+                LocalStorageRepository localStorageRepository = LocalStorageRepository();
+             await   localStorageRepository.removeToken().then( (v){
+         
+   Navigator.popUntil(context, (route) => false);
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+             });
+
+
+          
+              },),
             ],
            ),
            ) 

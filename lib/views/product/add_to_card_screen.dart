@@ -3,6 +3,8 @@ import 'package:e_comperce_app/controller/product_controller.dart';
 import 'package:e_comperce_app/models/product_list_model.dart';
 import 'package:e_comperce_app/repositary/order_services/order_service.dart';
 import 'package:e_comperce_app/views/product/order_screen.dart';
+import 'package:e_comperce_app/views/widgets/appbar/custom_appbar.dart';
+import 'package:e_comperce_app/views/widgets/custm_primary_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -27,11 +29,26 @@ class _CartListScreenState extends ConsumerState<CartListScreen> {
 
 //  final filter =FilterProducts.fiterForAddToCard(ref: ref,);
     return  Scaffold(
-appBar: AppBar(
-  title: Text('CART'),
-),
+
       body: Column(
         children: [
+
+             CustomPrimaryHeaderContainer(child: Column(
+              children: [
+
+              //  CustomHomeAppbar(), 
+              CustomAppBar(
+                showBackArrow: true,
+                title: Text('CART'),
+              ),
+       
+              SizedBox(height: 32,),
+
+
+    
+         
+              ],
+            ),),
           Expanded(child: ListView.builder(
         itemCount: cartProvider?.length ?? 0,
         itemBuilder: (context,index){
