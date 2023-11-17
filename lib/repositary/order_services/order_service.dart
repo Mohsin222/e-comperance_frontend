@@ -140,10 +140,10 @@ return 200;
 
 
 
-Future userOrders({required BuildContext context,String? userId}) async {
+Future userOrders({required BuildContext context,String? userId ,required int pageNo}) async {
     try {
 
-     String url = AppConstants.baseUrl + 'api/v1/orders/get/userorders/$userId';
+     String url = AppConstants.baseUrl + 'api/v1/orders/get/userorders/$userId/$pageNo';
 
     // String url ='http://localhost:8000/api/v1/products/';
        

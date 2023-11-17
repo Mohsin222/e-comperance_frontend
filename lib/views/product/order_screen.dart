@@ -103,6 +103,7 @@ FilterProducts.removeItemCountWhenOrderPlace(ref: ref,
 cartitems: orderModel.orderItems!,
 productId: orderModel.orderItems![0].productId);
 
+// ignore: use_build_context_synchronously
 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const CustomBottomNavigationBar()));
   });
 

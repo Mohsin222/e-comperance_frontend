@@ -1,11 +1,14 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_comperce_app/controller/aurh_controller.dart';
 import 'package:e_comperce_app/controller/product_controller.dart';
 import 'package:e_comperce_app/repositary/auth_services/auth_services.dart';
 import 'package:e_comperce_app/repositary/load_data.dart';
 import 'package:e_comperce_app/services/filter_product.dart';
 import 'package:e_comperce_app/utils/text_field_decoration.dart';
+import 'package:e_comperce_app/views/home/widgets/caresol_slider.dart';
 import 'package:e_comperce_app/views/home/widgets/category_button.dart';
 import 'package:e_comperce_app/views/home/widgets/home_appbar.dart';
+import 'package:e_comperce_app/views/home/widgets/home_product_list_grid.dart';
 import 'package:e_comperce_app/views/product/add_to_card_screen.dart';
 import 'package:e_comperce_app/views/product/product_detail_screen.dart';
 import 'package:e_comperce_app/views/product/widgets/product_widget.dart';
@@ -85,7 +88,7 @@ giveinitialValToField();
           child: Column(
             children: [
               CustomPrimaryHeaderContainer(
-                height: 300.h,
+                height: 280.h,
                 child:  Column(children: [
                    CustomHomeAppbar(
                   
@@ -128,7 +131,7 @@ giveinitialValToField();
                   children: List.generate(categoryListProv.length, (index) => CategoryButton(
               onpress: (){
                  ref.watch(categoryValue.notifier).state=categoryListProv[index]!.name!;
-                 print(ref.watch(categoryValue));
+               
               },
                     category: categoryListProv[index],
                   )),
@@ -138,20 +141,8 @@ giveinitialValToField();
               ),
             
               SizedBox(height: 10.h,),
-            Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
-          padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
-          height: 0.2.sh,
-           
-          decoration: BoxDecoration(
-
-           color: Colors.red,
-           borderRadius: BorderRadius.circular(10.r),
-           image: DecorationImage(image: NetworkImage('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),fit: BoxFit.cover)
-          ),
-              
-            ),
-             
+       
+   CustomCarsolSlider(),
                  SizedBox(height: 10.h,),
          Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,21 +158,21 @@ giveinitialValToField();
           ],
          ),          
                    SizedBox(height: 10.h,),
-              SizedBox(
-                height: 400.h,
-                child: GridView.builder(gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 0.5.sw,
-          mainAxisExtent: 240.h,
-                    // childAspectRatio: 2 / 3,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 20
-              ), 
-              itemCount: featuredProductList!.length,
-              itemBuilder: (context,index){
-              return ProductCard(productModel: featuredProductList[index],);
+          //     SizedBox(
+          //       height: 400.h,
+          //       child: GridView.builder(gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          // maxCrossAxisExtent: 0.5.sw,
+          // mainAxisExtent: 240.h,
+          //           // childAspectRatio: 2 / 3,
+          //           crossAxisSpacing: 5,
+          //           mainAxisSpacing: 20
+          //     ), 
+          //     itemCount: featuredProductList!.length,
+          //     itemBuilder: (context,index){
+          //     return ProductCard(productModel: featuredProductList[index],);
               
-              }))
-              
+          //     }))
+              HomeProductListGrid(),
               
               
           // Image.network(user.)
