@@ -45,6 +45,9 @@ dependencies:
   flutter_stripe: ^9.5.0+1
   carousel_slider: ^4.2.1
 
+
+  pull_to_refresh_flutter3: ^2.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
